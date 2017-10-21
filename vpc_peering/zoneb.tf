@@ -82,22 +82,6 @@ resource "aws_instance" "exampleb" {
   tags = { Name = "my first instance on B" }
 }
 
-resource "aws_vpc_peering_connection" "mypeering" {
-  peer_vpc_id   = "${aws_vpc.vpca.id}"
-  vpc_id        = "${aws_vpc.vpcb.id}"
-  auto_accept   = true
-
-  tags {
-    Name = "VPC Peering between foo and bar"
-  }
-}
-
-resource "aws_route" "secondary2primary" {
-  route_table_id = "${aws_vpc.vpcb.main_route_table_id}"
-  destination_cidr_block = "${aws_vpc.vpca.cidr_block}"
-  vpc_peering_connection_id = "${aws_vpc_peering_connection.mypeering.id}"
-}
-
 output "public_ipb" {
   value = "${aws_instance.exampleb.public_ip}"
 }
